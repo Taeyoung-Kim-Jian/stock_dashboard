@@ -4,10 +4,15 @@ import pandas as pd
 from supabase import create_client
 
 # ------------------------------------------------
-# Supabase 연결
+# Supabase 연결 (Render 및 Streamlit Cloud 겸용)
 # ------------------------------------------------
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+SUPABASE_URL = os.environ.get("SUPABASE_URL") or st.secrets.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY") or st.secrets.get("SUPABASE_KEY")
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    st.error("❌ Supabase 환경변수(SUPABASE_URL, SUPABASE_KEY)가 설정되지 않았습니다.")
+    st.stop()
+
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ------------------------------------------------
